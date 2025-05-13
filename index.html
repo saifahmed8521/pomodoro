@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Focus Timer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loader"></div>
+        <div class="app-title">Pomodoro Focus Timer</div>
+        <div class="credit">Made by Saif with ❤️</div>
+    </div>
+
+    <div id="main-container" class="container hidden">
+        <header>
+            <h1>Pomodoro Focus Timer</h1>
+            <div class="header-controls">
+                <button id="fullscreen-btn" class="icon-btn" title="Full-screen Focus Mode">
+                    <i class="fas fa-expand"></i>
+                </button>
+                <button id="toggle-mini-timer-btn" class="icon-btn" title="Toggle Mini Timer">
+                    <i class="fas fa-external-link-alt"></i>
+                </button>
+                <button id="toggle-dark-mode-btn" class="icon-btn" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+        
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="timer">Timer</button>
+            <button class="tab-btn" data-tab="stats">Statistics</button>
+        </nav>
+        
+        <div id="timer-tab" class="tab-content active">
+            <div class="timer-container">
+                <div class="session-label" id="session-label">Work Time</div>
+                
+                <div class="circle-timer">
+                    <div class="circle-timer-inner">
+                        <div class="timer-display" id="timer-display">25:00</div>
+                    </div>
+                    <svg class="circle-timer-svg" viewBox="0 0 100 100">
+                        <circle class="circle-timer-bg" cx="50" cy="50" r="45"></circle>
+                        <circle class="circle-timer-progress" id="timer-progress" cx="50" cy="50" r="45"></circle>
+                    </svg>
+                </div>
+                
+                <div class="controls">
+                    <button id="start-btn" class="btn">Start</button>
+                    <button id="pause-btn" class="btn" disabled>Pause</button>
+                    <button id="reset-btn" class="btn">Reset</button>
+                </div>
+                <div class="test-sound">
+                    <button id="test-sound-btn" class="btn btn-small">Test Sound</button>
+                </div>
+            </div>
+            
+            <div class="sessions-counter">
+                <div class="counter-label">Completed Sessions:</div>
+                <div class="counter" id="completed-counter">0</div>
+            </div>
+            
+            <div class="settings-container">
+                <h2>Settings</h2>
+                <div class="settings-grid">
+                    <div class="setting">
+                        <label for="work-duration">Work Duration (min):</label>
+                        <input type="number" id="work-duration" min="1" max="60" value="25">
+                    </div>
+                    <div class="setting">
+                        <label for="short-break-duration">Short Break (min):</label>
+                        <input type="number" id="short-break-duration" min="1" max="30" value="5">
+                    </div>
+                    <div class="setting">
+                        <label for="long-break-duration">Long Break (min):</label>
+                        <input type="number" id="long-break-duration" min="1" max="60" value="15">
+                    </div>
+                    <div class="setting checkbox">
+                        <label for="auto-start">Auto-start next session:</label>
+                        <input type="checkbox" id="auto-start" checked>
+                    </div>
+                    <div class="setting checkbox">
+                        <label for="sound-enabled">Sound notifications:</label>
+                        <input type="checkbox" id="sound-enabled" checked>
+                    </div>
+                    <div class="setting checkbox">
+                        <label for="dark-mode">Dark Mode:</label>
+                        <input type="checkbox" id="dark-mode">
+                    </div>
+                </div>
+                <button id="save-settings-btn" class="btn">Save Settings</button>
+            </div>
+
+            <div class="task-container">
+                <h2>Tasks</h2>
+                <div class="task-input-container">
+                    <input type="text" id="task-input" placeholder="What are you working on?">
+                    <button id="add-task-btn" class="btn">Add</button>
+                </div>
+                <ul id="task-list" class="task-list"></ul>
+            </div>
+        </div>
+        
+        <div id="stats-tab" class="tab-content">
+            <div class="stats-container">
+                <h2>Pomodoro Statistics</h2>
+                
+                <div class="stats-controls">
+                    <div class="stats-period-selector">
+                        <button class="period-btn active" data-period="day">Day</button>
+                        <button class="period-btn" data-period="week">Week</button>
+                        <button class="period-btn" data-period="month">Month</button>
+                    </div>
+                    <button id="export-stats-btn" class="btn">
+                        <i class="fas fa-download"></i> Export CSV
+                    </button>
+                </div>
+                
+                <div class="calendar-view">
+                    <div class="calendar-header">
+                        <button id="prev-period-btn" class="calendar-nav-btn">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h3 id="calendar-title">May 2023</h3>
+                        <button id="next-period-btn" class="calendar-nav-btn">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div id="calendar-grid" class="calendar-grid">
+                        <!-- Calendar will be generated by JS -->
+                    </div>
+                </div>
+                
+                <div class="stats-chart-container">
+                    <canvas id="stats-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Draggable Mini Timer -->
+    <div id="mini-timer" class="mini-timer hidden">
+        <div class="mini-timer-handle">
+            <i class="fas fa-grip-lines"></i>
+        </div>
+        <div class="mini-timer-display" id="mini-timer-display">25:00</div>
+        <div class="mini-timer-label" id="mini-timer-label">Work</div>
+        <div class="mini-timer-controls">
+            <button id="mini-start-btn" class="mini-btn">
+                <i class="fas fa-play"></i>
+            </button>
+            <button id="mini-pause-btn" class="mini-btn" disabled>
+                <i class="fas fa-pause"></i>
+            </button>
+            <button id="mini-close-btn" class="mini-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <audio id="notification-sound" preload="auto">
+        <source src="audio1.mp3" type="audio/mp3">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-alert-quick-chime-766.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <!-- Chart.js for Statistics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 

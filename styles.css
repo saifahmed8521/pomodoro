@@ -1,0 +1,795 @@
+:root {
+    --primary-color: #ff6347; /* Tomato red */
+    --secondary-color: #4caf50; /* Green */
+    --tertiary-color: #3498db; /* Blue for long break */
+    --text-color: #333;
+    --bg-color: #f5f5f5;
+    --card-bg: #fff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --btn-hover: #e8e8e8;
+    --progress-bg: #e0e0e0;
+    --border-color: #eaeaea;
+    --disabled-color: #ccc;
+    --focus-color: #f8f8f8;
+}
+
+.dark-mode {
+    --primary-color: #ff6347; /* Keep tomato red */
+    --secondary-color: #5cb85c; /* Slightly brighter green */
+    --tertiary-color: #4da6ff; /* Slightly brighter blue */
+    --text-color: #e0e0e0;
+    --bg-color: #1e1e1e;
+    --card-bg: #2d2d2d;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --btn-hover: #3d3d3d;
+    --progress-bg: #3d3d3d;
+    --border-color: #444;
+    --disabled-color: #555;
+    --focus-color: #111;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Loading Screen */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+.loader {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(255, 99, 71, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.app-title {
+    color: var(--primary-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.credit {
+    color: var(--primary-color);
+    font-size: 1rem;
+    opacity: 0.8;
+    margin-top: 15px;
+}
+
+.hidden {
+    display: none;
+}
+
+.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Main Container */
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+header h1 {
+    margin: 0 auto;
+}
+
+.header-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+h1, h2, h3 {
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+/* Icon Buttons */
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.icon-btn:hover {
+    background-color: var(--btn-hover);
+}
+
+/* Navigation Tabs */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    background-color: var(--btn-hover);
+}
+
+.tab-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Cards */
+.timer-container, .settings-container, .task-container, .sessions-counter,
+.stats-container, .account-container {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    transition: all 0.3s ease;
+}
+
+/* Circle Timer */
+.circle-timer {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: 0 auto 1.5rem;
+}
+
+.circle-timer-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.circle-timer-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.circle-timer-bg {
+    fill: none;
+    stroke: var(--progress-bg);
+    stroke-width: 4;
+}
+
+.circle-timer-progress {
+    fill: none;
+    stroke: var(--primary-color);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 283; /* 2*PI*45 */
+    stroke-dashoffset: 283; /* Initially full offset = no progress */
+    transition: stroke 0.3s;
+}
+
+.short-break-mode .circle-timer-progress {
+    stroke: var(--secondary-color);
+}
+
+.long-break-mode .circle-timer-progress {
+    stroke: var(--tertiary-color);
+}
+
+.session-label {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.timer-display {
+    font-size: 3.5rem;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 2px;
+    transition: color 0.3s;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.btn {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn:hover:not(:disabled) {
+    background-color: var(--btn-hover);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-outline {
+    background: none;
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+}
+
+#start-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.test-sound {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.75rem;
+}
+
+.btn-small {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    opacity: 0.8;
+}
+
+.sessions-counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.counter {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.setting {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.setting.checkbox {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+input[type="number"],
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 100%;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    transition: border-color 0.2s;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+}
+
+.task-input-container {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+#task-input {
+    flex: 1;
+}
+
+.task-list {
+    list-style-type: none;
+    margin-top: 1rem;
+}
+
+.task-list li {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-list li:last-child {
+    border-bottom: none;
+}
+
+.task-list li button {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.task-list li button:hover {
+    color: var(--primary-color);
+}
+
+.task-list li.completed {
+    text-decoration: line-through;
+    color: #888;
+}
+
+/* Session color states */
+.work-mode .timer-display {
+    color: var(--primary-color);
+}
+
+.short-break-mode .timer-display {
+    color: var(--secondary-color);
+}
+
+.long-break-mode .timer-display {
+    color: var(--tertiary-color);
+}
+
+/* Stats Tab */
+.stats-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.stats-period-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.period-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    background: none;
+    color: var(--text-color);
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.period-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.calendar-view {
+    margin-bottom: 2rem;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.calendar-nav-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.calendar-day-header {
+    text-align: center;
+    font-weight: bold;
+}
+
+.calendar-day-number {
+    font-size: 0.8rem;
+    align-self: flex-start;
+}
+
+.calendar-day-sessions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    flex-grow: 1;
+}
+
+.calendar-day.today {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 99, 71, 0.1);
+}
+
+.calendar-day.empty {
+    background-color: var(--border-color);
+    opacity: 0.3;
+}
+
+.stats-chart-container {
+    height: 300px;
+    position: relative;
+}
+
+/* Account Tab */
+.auth-section, .user-section {
+    padding: 1rem;
+}
+
+.auth-buttons {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.auth-btn {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.auth-separator {
+    text-align: center;
+    margin: 1rem 0;
+    position: relative;
+}
+
+.auth-separator::before,
+.auth-separator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background-color: var(--border-color);
+}
+
+.auth-separator::before {
+    left: 0;
+}
+
+.auth-separator::after {
+    right: 0;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.auth-switch a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.user-avatar {
+    font-size: 3rem;
+    color: var(--primary-color);
+}
+
+.sync-options {
+    margin-bottom: 2rem;
+}
+
+.sync-option {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#save-sync-options-btn {
+    margin-top: 1rem;
+}
+
+/* Mini Timer */
+.mini-timer {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 180px;
+    padding: 0.75rem;
+    z-index: 990;
+    cursor: move;
+}
+
+.mini-timer-handle {
+    text-align: center;
+    padding-bottom: 0.5rem;
+    cursor: grab;
+    color: #888;
+}
+
+.mini-timer-display {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0.25rem;
+}
+
+.mini-timer-label {
+    text-align: center;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.mini-timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.mini-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.mini-btn:disabled {
+    color: var(--disabled-color);
+    cursor: not-allowed;
+}
+
+/* Fullscreen Mode */
+.fullscreen-mode {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    background-color: var(--focus-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.fullscreen-mode .circle-timer {
+    width: 350px;
+    height: 350px;
+}
+
+.fullscreen-mode .timer-display {
+    font-size: 5rem;
+}
+
+.fullscreen-mode .session-label {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.fullscreen-exit {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        margin: 1rem auto;
+        padding: 0.75rem;
+    }
+    
+    .circle-timer {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .timer-display {
+        font-size: 2.8rem;
+    }
+    
+    .calendar-grid {
+        grid-template-columns: repeat(7, 1fr);
+        font-size: 0.8rem;
+    }
+    
+    .calendar-day {
+        padding: 0.15rem;
+    }
+    
+    .calendar-day-number {
+        font-size: 0.7rem;
+    }
+    
+    .calendar-day-sessions {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        margin: 0.5rem auto;
+        padding: 0.5rem;
+    }
+    
+    .circle-timer {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .timer-display {
+        font-size: 2.5rem;
+    }
+    
+    .controls {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 0.8rem;
+    }
+    
+    .stats-controls {
+        flex-direction: column;
+    }
+    
+    .stats-period-selector {
+        width: 100%;
+    }
+    
+    .period-btn {
+        flex: 1;
+        text-align: center;
+    }
+    
+    .notes-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .mini-timer {
+        width: 120px;
+        font-size: 0.85rem;
+    }
+    
+    .mini-timer-display {
+        font-size: 1.5rem;
+    }
+} 
